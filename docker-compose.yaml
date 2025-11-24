@@ -1,0 +1,31 @@
+---
+services:
+  test-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment: 
+      OTEL_URL: 'http://otelcol:4318'
+      SERVER_PORT: 3002 
+  
+  otelcol:
+    image: otel/opentelemetry-collector-contrib:0.123.0
+    restart: on-failure
+    volumes:
+      - ./collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - 4317:4317
+      - 4318:4318
+    depends_on:
+      - grafana
+
+  grafana:
+    image: grafana/otel-lgtm
+    restart: on-failure
+    ports:
+      - 3000:3000
+    environment:
+      - ENABLE_LOGS_TEMPO=true
+      - ENABLE_LOGS_OTELCOL=true  

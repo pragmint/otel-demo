@@ -1,0 +1,27 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+exporters:
+  debug:
+    verbosity: detailed
+  otlp/grafana:
+    endpoint: "grafana:4317"
+    tls:
+        insecure: true
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [otlp/grafana, debug]
+    metrics:
+      receivers: [otlp]
+      exporters: [otlp/grafana, debug]
+    logs:
+      receivers: [otlp]
+      exporters: [otlp/grafana, debug]
