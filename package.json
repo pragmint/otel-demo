@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "node tsx index.ts",
+    "start": "npx tsx index.ts",
     "start:otel": "npx tsx --import ./instrumentation.ts index.ts"
   },
   "keywords": [],
