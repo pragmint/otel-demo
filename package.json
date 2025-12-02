@@ -5,7 +5,9 @@
   "main": "index.ts",
   "scripts": {
     "start": "npx tsx index.ts",
-    "start:otel": "npx tsx --import ./instrumentation.ts index.ts"
+    "dice": "SERVICE_NAME=dice-service npx tsx --import ./instrumentation.ts dice.ts",
+    "game": "SERVICE_NAME=game-service npx tsx --import ./instrumentation.ts game.ts",
+    "notifier": "SERVICE_NAME=notifier-service npx tsx notifier.ts"
   },
   "keywords": [],
   "author": "",

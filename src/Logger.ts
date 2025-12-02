@@ -7,12 +7,12 @@ import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-http';
 
 const USE_CONSOLE = process.env.OTEL_URL === undefined 
 
-const collectorOptions = {
+const logExporter = new OTLPLogExporter({
     url: `${USE_CONSOLE ? "http://localhost:4318" : process.env.OTEL_URL}/v1/logs`,
     headers: {},
     concurrencyLimit: 1,
-};
-const logExporter = new OTLPLogExporter(collectorOptions);
+});
+
 const loggerProvider = new LoggerProvider({
     processors: [new BatchLogRecordProcessor(logExporter)]
 });
@@ -20,7 +20,7 @@ const loggerProvider = new LoggerProvider({
 const logger = loggerProvider.getLogger('default', '1.0.0');
 
 export class Logger {
-    static debug(message: string) {
+    static debug(message: string, attr?: Record<string, any>) {
         if (USE_CONSOLE) {
             console.log('DEBUG', message)
         } else {
@@ -28,11 +28,15 @@ export class Logger {
                 severityNumber: SeverityNumber.DEBUG,
                 severityText: 'debug',
                 body: message,
-                attributes: { 'log.type': 'custom' },
+                attributes: { 
+                    'log.type': 'normal',
+                    'service_name': process.env.SERVICE_NAME,
+                    ...attr
+                },
             });
         }
     }
-    static info(message: string) {
+    static info(message: string, attr?: Record<string, any>) {
         if (USE_CONSOLE) {
             console.log('INFO', message)
         } else {
@@ -40,11 +44,15 @@ export class Logger {
                 severityNumber: SeverityNumber.INFO,
                 severityText: 'info',
                 body: message,
-                attributes: { 'log.type': 'custom' },
+                attributes: { 
+                    'log.type': 'normal',
+                    'service_name': process.env.SERVICE_NAME,
+                    ...attr
+                },
             });
         }
     }
-    static warn(message: string) {
+    static warn(message: string, attr?: Record<string, any>) {
         if (USE_CONSOLE) {
             console.log('WARN', message)
         } else {
@@ -52,11 +60,15 @@ export class Logger {
                 severityNumber: SeverityNumber.WARN,
                 severityText: 'warn',
                 body: message,
-                attributes: { 'log.type': 'custom' },
+                attributes: { 
+                    'log.type': 'normal',
+                    'service_name': process.env.SERVICE_NAME,
+                    ...attr
+                },
             });
         }
     }
-    static error(message: string) {
+    static error(message: string, attr?: Record<string, any>) {
         if (USE_CONSOLE) {
             console.log('ERROR', message)
         } else {
@@ -64,11 +76,15 @@ export class Logger {
                 severityNumber: SeverityNumber.ERROR,
                 severityText: 'error',
                 body: message,
-                attributes: { 'log.type': 'custom' },
+                attributes: { 
+                    'log.type': 'normal',
+                    'service_name': process.env.SERVICE_NAME,
+                    ...attr
+                },
             });
         }
     }
-    static fatal(message: string) {
+    static fatal(message: string, attr?: Record<string, any>) {
         if (USE_CONSOLE) {
             console.log('FATAL', message)
         } else {
@@ -76,7 +92,11 @@ export class Logger {
                 severityNumber: SeverityNumber.FATAL,
                 severityText: 'fatal',
                 body: message,
-                attributes: { 'log.type': 'custom' },
+                attributes: { 
+                    'log.type': 'normal',
+                    'service_name': process.env.SERVICE_NAME,
+                    ...attr
+                },
             });
         }
     }

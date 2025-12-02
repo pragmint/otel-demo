@@ -1,14 +1,36 @@
 ---
 services:
-  test-app:
+
+  notifier:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: notifier.dockerfile
     ports:
       - "3002:3002"
     environment: 
-      OTEL_URL: 'http://otelcol:4318'
       SERVER_PORT: 3002 
+
+  game-app:
+    build:
+      context: .
+      dockerfile: game.dockerfile
+    ports:
+      - "3001:3001"
+    environment: 
+      OTEL_URL: 'http://otelcol:4318'
+      DICE_URL: 'http://dice-app:3010'
+      SERVER_PORT: 3001 
+  
+  dice-app:
+    build:
+      context: .
+      dockerfile: dice.dockerfile
+    ports:
+      - "3010:3010"
+    environment: 
+      OTEL_URL: 'http://otelcol:4318'
+      LOGGER_URL: 'http://otelcol:3100'
+      SERVER_PORT: 3010 
   
   otelcol:
     image: otel/opentelemetry-collector-contrib:0.123.0
