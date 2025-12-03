@@ -1,4 +1,4 @@
-import { Logger } from "./Logger"
+import { Logger } from "./src/Logger"
 import { Express } from 'express';
 
 export const setupErrorHandling = (app: Express) => {

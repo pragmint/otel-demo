@@ -17,9 +17,7 @@ export const setupErrorHandling = (app: Express) => {
             Logger.error(`Unknown Error Type: ${JSON.stringify(e)}`)
             res.status(500).send(`Unknown Error Type: ${JSON.stringify(e)}`)
         }
-
     })
-
 }
 
 

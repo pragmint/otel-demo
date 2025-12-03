@@ -12,6 +12,11 @@ const getQueryParam = (req: Request, param: string) => {
     return value
 }
 
+app.get(`/oops`,  (_, res) => {
+    Logger.fatal(`This is a fake testing error`)
+    res.send("Fake test triggered");
+});
+
 app.get(`/monsters`,  (_, res) => {
     Logger.debug(`Getting Monsters`)
     res.json(getMonsters());
@@ -34,19 +39,24 @@ app.get(`/attack`, async (req, res) => {
 
 setupErrorHandling(app)
 
-fetch(`${process.env.DICE_URL}/health-check`)
-    .then(() => Logger.debug(`Checking dependency health`, {
-        caller: 'game-service',
-        callie: 'dice-service',
-    }))
-    .catch(() => Logger.fatal('Failed to establish connection with dependent service.', {
-        caller: 'game-service',
-        callie: 'dice-service',
-    }))
 
 app.get(`/health-check`, (_, res) => {
     Logger.debug(`Health Check`)
-    res.json({ healthy: true });
+    fetch(`${process.env.DICE_URL}/health-check`)
+        .then(() => {
+            Logger.debug(`Checking dependency health`, {
+                caller: 'game-service',
+                callie: 'dice-service',
+            })
+            res.json({ healthy: true });
+        })
+        .catch(() => {
+            Logger.fatal('Failed to establish connection with dependent service.', {
+                caller: 'game-service',
+                callie: 'dice-service',
+            })
+            res.status(500).json({ healthy: false });
+        })
 });
 
 app.listen(PORT, () => console.log(`Listening for requests on http://localhost:${PORT}`));

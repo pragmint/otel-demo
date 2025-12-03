@@ -48,6 +48,8 @@ services:
     restart: on-failure
     ports:
       - 3000:3000
+    volumes:
+      - ./data:/data
     environment:
       - ENABLE_LOGS_TEMPO=true
       - ENABLE_LOGS_OTELCOL=true  
