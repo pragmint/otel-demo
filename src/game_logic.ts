@@ -18,6 +18,18 @@ type Monster = {
     ac: number
 }
 
+let _characters: Character[] = [
+    { name: "Aragorn", level: 7, class: "Ranger", attack_mod: 4, damage_dice: 'd12', damage_mod: 5 },
+    { name: "Arwen", level: 12, class: "Cleric", attack_mod: 1, damage_dice: 'd8', damage_mod: 2 },
+]
+
+let _monsters: Monster[] = [
+    { name: "Fluffy", monster_type: "Warg", health: 40, full_health: 40, ac: 14 },
+    { name: "Gus", monster_type: "Warg", health: 40, full_health: 40, ac: 14 },
+    { name: "Luronk", monster_type: "Orc", health: 54, full_health: 54, ac: 14 },
+    { name: "Xunag", monster_type: "Orc", health: 54, full_health: 54, ac: 14 },
+]
+
 let characters: Character[] = [
     { name: "Aragorn", level: 7, class: "Ranger", attack_mod: 4, damage_dice: 'd12', damage_mod: 5 },
     { name: "Arwen", level: 12, class: "Cleric", attack_mod: 1, damage_dice: 'd8', damage_mod: 2 },
@@ -41,6 +53,10 @@ const setMonsterHealth = (name: string, health: number) => {
 }
 export const getCharacters = () => characters
 export const getMonsters = () => monsters
+export const reset = () => {
+    monsters = _monsters
+    characters = _characters
+} 
 
 const rollDice = async  (dice_code: string): Promise<number> => {
     const url = `${process.env.DICE_URL}/${dice_code}`

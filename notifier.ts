@@ -14,6 +14,7 @@ const getQueryParam = (req: Request, param: string) => {
 app.get(`/`, (_, res) => {
     res.json(notifications);
 });
+
 app.get(`/clear`, (_, res) => {
     notifications = []
     res.send("cleared");

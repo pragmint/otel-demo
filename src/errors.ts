@@ -18,7 +18,7 @@ export const setupErrorHandling = (app: Express) => {
             res.status(500).send(`Unknown Error Type: ${JSON.stringify(e)}`)
         }
     })
-}
+}    
 
 
 export class HttpError extends Error {

@@ -1,7 +1,7 @@
 import express, { Express, Request } from 'express';
 import { Logger } from './src/Logger';
 import { HttpError, setupErrorHandling } from './src/errors';
-import { attack, getCharacters, getMonsters, makeAttackResponse } from './src/game_logic';
+import { attack, getCharacters, getMonsters, makeAttackResponse, reset } from './src/game_logic';
 
 const PORT: number = parseInt(process.env.SERVER_PORT || '3001');
 const app: Express = express();
@@ -11,6 +11,12 @@ const getQueryParam = (req: Request, param: string) => {
     if (value === undefined) throw new HttpError(`Query parameter '${param}' was not defined.`, 400)
     return value
 }
+
+app.get(`/reset`,  (_, res) => {
+    Logger.debug(`Resetting Game`)
+    reset();
+    res.send("Game reset");
+});
 
 app.get(`/oops`,  (_, res) => {
     Logger.fatal(`This is a fake testing error`)

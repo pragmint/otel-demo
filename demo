@@ -1,0 +1,80 @@
+#!/usr/bin/env nu
+
+def main [] {
+    help main 
+    | split row "Input/output"
+    | get 0
+}
+
+def 'main alerts' [] {
+   http get localhost:3002/
+}
+
+def 'main reset' [] {
+   http get localhost:3001/reset
+}
+
+def 'main monsters' [] {
+   http get localhost:3001/monsters
+}
+
+def 'main attack' [
+    --character(-c): string
+    --monster(-m): string
+    --ignore(-i)
+] {
+    try {
+        http get $'localhost:3001/attack?character=($character)&monster=($monster)'
+        | if $ignore { ignore } else { }
+    }
+}
+
+def 'main char' [] {
+   http get localhost:3001/characters
+}
+
+def 'main log failure' [] {
+   http get localhost:3001/oops
+}
+
+
+def sleep-random [] {
+    sleep (random int 0..2 | into duration --unit sec)
+}
+
+def 'main run' [] {
+    print "Running demo. Ctr-C to quit."
+    loop {
+        for i in 1..10 {
+            main attack -c Aragorn -m Gus -i
+            main attack -c Aragorn -m bob -i
+            main attack -c Arwen -m Fluffy -i
+            main monsters
+            main char
+            sleep-random 
+            main attack -c Aragorn -m bob -i
+
+            main attack -c Arwen -m Luronk -i
+            main monsters
+            main char
+            sleep-random 
+
+            main attack -c Aragorn -m Gus -i
+            main attack -c Aragorn -m Xunag -i
+            main attack -c Aragorn -m bob -i
+            main monsters
+            main char
+            sleep-random 
+
+            main attack -c Arwen -m Fluffy -i
+            main attack -c Aragorn -m bob -i
+            main monsters
+            main char
+            sleep-random 
+
+            | ignore
+        }
+        main reset
+    }
+}
+
